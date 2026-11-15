@@ -28,7 +28,7 @@ button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:11px 
 <p class="s">Customer details fill pannunga, services select pannunga, Submit kudutha PDF download aagum.</p>
 
 <div class="c"><h2>Company settings (oru thadava mattum)</h2><div class="g">
-<div><label class="f">Change logo (optional)</label><input id="lg" type="file" accept="image/*"><span class="s" id="lp" style="margin:4px 0 0;display:block"></span></div>
+<div><label class="f">Change logo (optional)</label><input id="lg" type="file" accept="image/*" src="images/logo.png"><span class="s" id="lp" style="margin:4px 0 0;display:block"></span></div>
 <div><label class="f">Sales person</label><input id="sp"></div>
 <div><label class="f">Company address</label><input id="sa" value="Near Four Road, Kolathur - 636 303"></div>
 <div><label class="f">GSTIN</label><input id="sg"></div>
