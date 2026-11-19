@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Idee Infotech – Quotation Generator</title>
@@ -23,11 +23,14 @@ label.f{font-size:12px;color:var(--mu);display:block;margin-bottom:3px}
 .bar b{font-size:17px}
 button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:11px 18px;font:600 15px inherit;font-family:inherit}
 .hd{display:grid;grid-template-columns:22px 1fr 78px 52px 78px;gap:6px;font-size:11px;color:var(--mu)}
+.alt{background:transparent;color:var(--ac);border:1px solid var(--ac)}.rb{display:block;width:100%;text-align:left;margin-top:6px;padding:8px 10px;font-size:13px;font-weight:500}
+.tabs{display:flex;gap:8px;margin:8px 0 12px}.tab{background:transparent;color:var(--tx);border:1px solid var(--bd);padding:9px 14px;border-radius:10px;font-weight:600}.tab.on{background:var(--ac);color:#fff;border-color:var(--ac)}
 </style></head><body><div class="w">
 <h1>IDEE INFOTECH – Quotation Generator</h1>
+<div class="tabs"><button id="tb1" class="tab on" type="button">Quotation</button><button id="tb2" class="tab" type="button">Payment Receipt</button></div>
 <p class="s">Customer details fill pannunga, services select pannunga, Submit kudutha PDF download aagum.</p>
 
-<div class="c"><h2>Company settings (oru thadava mattum)</h2><div class="g">
+<div class="c"><h2>Company settings</h2><div class="g">
 <div><label class="f">Change logo (optional)</label><input id="lg" type="file" accept="image/*"><span class="s" id="lp" style="margin:4px 0 0;display:block"></span></div>
 <div><label class="f">Sales person</label><input id="sp"></div>
 <div><label class="f">Company address</label><input id="sa" value="Near Four Road, Kolathur - 636 303"></div>
@@ -35,6 +38,8 @@ button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:11px 
 <div><label class="f">Validity (days)</label><input id="vd" type="number" value="15"></div>
 <div><label class="f">Signature image (optional)</label><input id="sgf" type="file" accept="image/*"><span class="s" id="sgp" style="margin:4px 0 0;display:block"></span></div>
 </div></div>
+
+<div id="tq"><div class="c" id="oqc" style="display:none"><h2>Old quotation paaka</h2><div class="g"><div><label class="f">Quotation number (e.g. 0003 or IDEE/26-27/0003)</label><input id="oq"></div><div style="align-self:end"><button id="oqb" type="button">Open</button></div></div><div id="rl"></div></div>
 
 <div class="c"><h2>Customer details (Bill To)</h2><div class="g">
 <div><label class="f">Customer name *</label><input id="cn"></div>
@@ -49,10 +54,36 @@ button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:11px 
 <div class="c"><h2>Extras</h2><div class="g">
 <div><label class="f">Urgent delivery surcharge</label><select id="ur"><option value="0">None</option><option value="25">25%</option><option value="50">50%</option></select></div>
 <div><label class="f">GST</label><select id="gs"><option value="0">Not included</option><option value="18">18% GST</option></select></div>
+<div><label class="f">Discount</label><select id="dt"><option value="n">None</option><option value="p">Percent (%)</option><option value="a">Amount (Rs.)</option></select></div>
+<div><label class="f">Discount value</label><input id="dv" type="number" min="0" value="0"></div>
 </div></div>
+<div class="c" id="pvc" style="display:none"><h2>Quotation preview <span id="pvn" style="color:var(--mu);font-weight:400"></span></h2><p class="s">Edit panna mela form-la maathunga, preview thaanaa update aagum.</p><div id="pv"></div><div id="dc" style="margin-top:12px"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button id="dl" type="button">Download PDF</button><button id="ed" type="button" class="alt">Edit details</button><button id="nw" type="button" class="alt">New quotation</button></div></div></div>
+<div id="tr" style="display:none">
+<div class="c" id="r_oqc" style="display:none"><h2>Old receipt paaka</h2><div class="g"><div><label class="f">Receipt number (e.g. 0003 or RCT/26-27/0003)</label><input id="r_oq"></div><div style="align-self:end"><button id="r_oqb" type="button">Open</button></div></div><div id="r_rl"></div></div>
+<div class="c"><h2>Quotation link (optional)</h2><div class="g"><div><label class="f">Quotation number</label><input id="r_q" placeholder="0003 or IDEE/26-27/0003"></div><div style="align-self:end"><button id="r_qb" type="button" class="alt">Fetch details</button></div></div><p class="s" style="margin:8px 0 0">Quotation number podunga, customer details, total, advance ellam thaanaa fill aagum.</p></div>
+<div class="c"><h2>Received from</h2><div class="g">
+<div><label class="f">Customer name *</label><input id="r_n"></div>
+<div><label class="f">Phone *</label><input id="r_p" type="tel"></div>
+<div><label class="f">Email</label><input id="r_e" type="email"></div>
+<div><label class="f">Business / Company</label><input id="r_b"></div>
+</div><div style="margin-top:8px"><label class="f">Address</label><input id="r_a"></div></div>
+<div class="c"><h2>Payment details</h2><div class="g">
+<div style="grid-column:1/-1"><label class="f">Payment for (description) *</label><input id="r_d" placeholder="e.g. Advance for website design"></div>
+<div><label class="f">Total project amount (optional)</label><input id="r_t" type="number" min="0" inputmode="decimal"></div>
+<div><label class="f">Previously paid (optional)</label><input id="r_pp" type="number" min="0" inputmode="decimal"></div>
+<div><label class="f">Amount received now *</label><input id="r_am" type="number" min="0" inputmode="decimal"></div>
+<div><label class="f">Payment date</label><input id="r_dt" type="date"></div>
+<div><label class="f">Payment mode</label><select id="r_m"><option>Cash</option><option>UPI</option><option>Bank Transfer</option><option>Cheque</option><option>Card</option><option>Other</option></select></div>
+<div><label class="f">Reference / Transaction ID</label><input id="r_ref"></div>
+</div><div style="margin-top:8px"><label class="f">Notes</label><textarea id="r_nt" rows="2"></textarea></div></div>
+<div style="margin:12px 0"><button id="r_sb" type="button">Submit &amp; Preview</button></div>
+<div class="c" id="r_pvc" style="display:none"><h2>Receipt preview <span id="r_pvn" style="color:var(--mu);font-weight:400"></span></h2><p class="s">Edit panna mela form-la maathunga, preview thaanaa update aagum.</p><div id="r_pv"></div><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button id="r_dl" type="button">Download PDF</button><button id="r_ed" type="button" class="alt">Edit details</button><button id="r_nw" type="button" class="alt">New receipt</button></div></div>
 </div>
-<div class="bar"><div><span class="s" style="margin:0">Total</span><br><b id="tot">Rs. 0</b></div><button id="sb">Submit &amp; Download PDF</button></div>
 
+</div>
+<div class="bar" id="qbar"><div><span class="s" style="margin:0">Total</span><br><b id="tot">Rs. 0</b></div><button id="sb">Submit &amp; Preview</button></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script>
@@ -85,16 +116,12 @@ const SF=["sa","sg","sp","vd"];
 try{SF.forEach(i=>{const v=localStorage.getItem("s_"+i);if(v)$(i).value=v});const l=localStorage.getItem("logo_v2");if(l){LOGO=JSON.parse(l);$("lp").textContent="Idee logo set ✓"}}catch(e){}
 SF.forEach(i=>$(i).addEventListener("input",()=>{try{localStorage.setItem("s_"+i,$(i).value)}catch(e){}}));
 $("lg").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const m=Math.min(1,700/im.width),c=document.createElement("canvas");c.width=im.width*m;c.height=im.height*m;c.getContext("2d").drawImage(im,0,0,c.width,c.height);const q=c.width/c.height;let w=64,h=64/q;if(h>24){h=24;w=24*q}LOGO={u:c.toDataURL("image/png"),w:w,h:h};try{localStorage.setItem("logo_v2",JSON.stringify(LOGO))}catch(x){}$("lp").textContent="Logo added ✓"};im.src=r.result};r.readAsDataURL(f)};
-function rows(){const o=[];D.forEach((c,i)=>c[1].forEach((s,j)=>{const k=i+"_"+j;if($("k"+k).checked){const p=+$("p"+k).value||0,q=Math.max(1,+$("q"+k).value||1);o.push([s[0]+(s[2]==="month"?" (per month)":""),p,q,p*q])}}));return o}
+var DESC={};function dn(k){const a=k.split("_"),s=D[a[0]][1][a[1]];return(DESC&&DESC[k])?DESC[k]:s[0]+(s[2]==="month"?" (per month)":"")}function rows(){const o=[];D.forEach((c,i)=>c[1].forEach((s,j)=>{const k=i+"_"+j;if($("k"+k).checked){const p=+$("p"+k).value||0,q=Math.max(1,+$("q"+k).value||1);o.push([dn(k),p,q,p*q])}}));return o}
 function calc(){D.forEach((c,i)=>c[1].forEach((s,j)=>{const k=i+"_"+j;$("t"+k).textContent=$("k"+k).checked?fm((+$("p"+k).value||0)*Math.max(1,+$("q"+k).value||1)):"-"}));
-const r=rows(),sub=r.reduce((a,x)=>a+x[3],0),u=sub*(+$("ur").value)/100,g=(sub+u)*(+$("gs").value)/100;$("tot").textContent=fm(sub+u+g);return{r,sub,u,g,total:sub+u+g}}
-document.addEventListener("input",calc);document.addEventListener("change",calc);calc();
-$("sb").onclick=()=>{
-if(!$("cn").value.trim()||!$("cp").value.trim()){alert("Customer name and phone fill pannunga.");return}
-const v=calc();if(!v.r.length){alert("Kuraindhathu oru service select pannunga.");return}
-const {jsPDF}=window.jspdf,d=new jsPDF(),now=new Date(),pad=n=>String(n).padStart(2,"0");
-const ds=pad(now.getDate())+"-"+pad(now.getMonth()+1)+"-"+now.getFullYear(),no=qno();
-const e2=new Date(now.getTime()+(+$("vd").value||15)*864e5),ex=pad(e2.getDate())+"-"+pad(e2.getMonth()+1)+"-"+e2.getFullYear();
+const r=rows(),sub=r.reduce((a,x)=>a+x[3],0),u=sub*(+$("ur").value)/100,dv=+$("dv").value||0,dt=$("dt").value;let disc=0,dp=0;if(dt==="p"){dp=Math.min(dv,100);disc=(sub+u)*dp/100}else if(dt==="a"){disc=Math.min(dv,sub+u)}
+const base=sub+u-disc,g=base*(+$("gs").value)/100;$("tot").textContent=fm(base+g);return{r,sub,u,disc,dp,g,total:base+g}}
+document.addEventListener("input",e=>{calc();if(e.target.id!=="oq"&&!e.target.closest("#tr"))sched()});document.addEventListener("change",e=>{calc();if(e.target.id!=="oq"&&!e.target.closest("#tr"))sched()});calc();
+function makePDF(v,no,ds,ex){const {jsPDF}=window.jspdf,d=new jsPDF();
 const NV=[11,27,61],NV2=[21,46,98],AC=[0,136,238],CY=[43,184,255],TX=[28,32,44],GR=[244,245,248],MU=[105,113,130];
 const poly=(p,c)=>{d.setFillColor(...c);d.lines(p.slice(1).map((q,i)=>[q[0]-p[i][0],q[1]-p[i][1]]),p[0][0],p[0][1],[1,1],"F",true)};
 d.setFillColor(...NV);d.rect(0,0,210,51,"F");
@@ -118,7 +145,7 @@ columnStyles:{0:{cellWidth:32,cellPadding:cp(12,2)},1:{cellWidth:84,cellPadding:
 didParseCell:h=>{if(h.section==="body"&&[0,2,4].includes(h.column.index))h.cell.styles.fillColor=GR},
 didDrawCell:h=>{if(h.section==="body"){const c=h.cell;d.setDrawColor(232,235,241);d.setLineWidth(.2);d.line(c.x,c.y+c.height,c.x+c.width,c.y+c.height)}}});
 let t=d.lastAutoTable.finalY+9;if(t>212){d.addPage();t=22}
-const T=[["Subtotal",fm(v.sub)]];if(v.u)T.push(["Urgent ("+$("ur").value+"%)",fm(v.u)]);if(v.g)T.push(["GST ("+$("gs").value+"%)",fm(v.g)]);
+const T=[["Subtotal",fm(v.sub)]];if(v.u)T.push(["Urgent ("+$("ur").value+"%)",fm(v.u)]);if(v.disc)T.push(["Discount"+(v.dp?" ("+v.dp+"%)":""),"- "+fm(v.disc)]);if(v.g)T.push(["GST ("+$("gs").value+"%)",fm(v.g)]);
 let ty=t+2;T.forEach(r=>{d.setFont("helvetica","normal");d.setFontSize(8.5);d.setTextColor(...MU);d.text(r[0],158,ty);d.setFont("helvetica","bold");d.setTextColor(...TX);d.text(r[1],198.5,ty,{align:"right"});ty+=6.2});
 d.setFillColor(...AC);d.rect(151,ty-1,59,11.5,"F");d.setTextColor(255,255,255);d.setFont("helvetica","bold");d.setFontSize(10);d.text("Total",158,ty+6.2);d.text(fm(v.total),198.5,ty+6.2,{align:"right"});
 d.setTextColor(...TX);d.setFont("helvetica","bold");d.setFontSize(11);d.text("Terms & Conditions:",L,t+4);
@@ -131,6 +158,140 @@ if(k==="p"){d.roundedRect(x+1.7,yy+1,1.6,3,.4,.4,"F")}else if(k==="e"){d.rect(x+
 let cy=th+6;[["p","7810010572"],["e","ideeinfotech@gmail.com"],["l",$("sa").value]].filter(r=>r[1]).forEach(r=>{ic(r[0],L,cy);d.setFont("helvetica","normal");d.setFontSize(8.5);d.setTextColor(...TX);d.text(d.splitTextToSize(r[1],100)[0],L+8,cy+3.5);cy+=7});
 const sy=Math.max(ty+32,th+10);if(SIG){const r=SIG.w/SIG.h;let w=44,h=w/r;if(h>17){h=17;w=h*r}try{d.addImage(SIG.u,"PNG",174.75-w/2,sy-h-1.5,w,h)}catch(x){}}d.setDrawColor(190,195,205);d.setLineWidth(.3);d.line(151,sy,198.5,sy);d.setFont("helvetica","bold");d.setFontSize(8.5);d.setTextColor(...TX);d.text("Authorised Sign",174.75,sy+5,{align:"center"});
 poly([[0,284.6],[90,284.6],[79,297],[0,297]],AC);poly([[88.6,289],[210,289],[210,297],[81.5,297]],NV);
-saveQ({no:no,date:ds,valid:ex,name:$("cn").value,phone:$("cp").value,email:$("ce").value,biz:$("cb").value,addr:$("ca").value,notes:$("cm").value,items:v.r.map(x=>x[0]+" x"+x[2]+" @"+x[1]).join("; "),sub:Math.round(v.sub),urgent:Math.round(v.u),gst:Math.round(v.g),total:Math.round(v.total),adv:Math.round(v.total/2),sp:$("sp").value,at:Date.now()});
-d.save("Quotation-"+$("cn").value.trim().replace(/\s+/g,"_")+"-"+no.replace(/\//g,"-")+".pdf")};
+return d}/*END_MAKEPDF*/
+let cur=null,PDFD=null,tmr=null,rt=0,rtR=0;
+const pad2=n=>String(n).padStart(2,"0"),fd=t=>{const e=new Date(t);return pad2(e.getDate())+"-"+pad2(e.getMonth()+1)+"-"+e.getFullYear()};
+const dts=()=>({ds:fd(cur.at0),ex:fd(cur.at0+(+$("vd").value||15)*864e5)});
+const lines=()=>{const o=[];D.forEach((c,i)=>c[1].forEach((s,j)=>{const k=i+"_"+j;if($("k"+k).checked)o.push([k,+$("p"+k).value||0,Math.max(1,+$("q"+k).value||1)])}));return o};
+function resetItems(){D.forEach((c,i)=>c[1].forEach((s,j)=>{const k=i+"_"+j;$("k"+k).checked=false;$("p"+k).value=s[1];$("q"+k).value=1}))}
+function valid(){return $("cn").value.trim()&&$("cp").value.trim()&&rows().length>0}
+async function genNo(){let n=0;try{n=+localStorage.getItem("qc")||0}catch(e){}
+try{const db=await claude.use("db");if(db){const s=await db.collection("quotations").orderBy("at","desc").limit(30).get();s.docs.forEach(x=>{const m=String((x.data()||{}).no||"").match(/(\d+)$/);if(m)n=Math.max(n,+m[1])})}}catch(e){}
+n++;try{localStorage.setItem("qc",n)}catch(e){}const t=new Date(),y=t.getMonth()>=3?t.getFullYear():t.getFullYear()-1;return "IDEE/"+String(y).slice(2)+"-"+String(y+1).slice(2)+"/"+String(n).padStart(4,"0")}
+async function renderPrev(buf,bid){const box=$(bid||"pv"),my=bid?++rtR:++rt;
+try{const lib=window.pdfjsLib;lib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+const pdf=await lib.getDocument({data:new Uint8Array(buf)}).promise;const cs=[];
+for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i),w=Math.min(box.clientWidth||700,820),v0=pg.getViewport({scale:1}),dpr=Math.min(window.devicePixelRatio||1,2),vp=pg.getViewport({scale:w/v0.width*dpr}),c=document.createElement("canvas");c.width=vp.width;c.height=vp.height;c.style.cssText="width:"+w+"px;max-width:100%;height:auto;display:block;margin:0 auto 10px;border:1px solid var(--bd);border-radius:6px;background:#fff";await pg.render({canvasContext:c.getContext("2d"),viewport:vp}).promise;cs.push(c)}
+if(my!==(bid?rtR:rt))return;box.innerHTML="";cs.forEach(c=>box.appendChild(c))}
+catch(e){if(my!==(bid?rtR:rt))return;box.innerHTML='<p class="s">Preview inga kaata mudiyala. "Download PDF" click panni paarunga.</p>'}}
+async function saveRec(v,ds,ex){try{const db=await claude.use("db");if(!db)return;
+await db.collection("quotations").doc(cur.no.replace(/\//g,"-")).set({no:cur.no,date:ds,valid:ex,name:$("cn").value,phone:$("cp").value,email:$("ce").value,biz:$("cb").value,addr:$("ca").value,notes:$("cm").value,
+items:v.r.map(x=>x[0]+" x"+x[2]+" @"+x[1]).join("; "),lines:JSON.stringify(lines()),desc:JSON.stringify(DESC),ur:$("ur").value,gs:$("gs").value,dt:$("dt").value,dv:$("dv").value,vd:$("vd").value,sp:$("sp").value,
+sub:Math.round(v.sub),urgent:Math.round(v.u),disc:Math.round(v.disc),gst:Math.round(v.g),total:Math.round(v.total),adv:Math.round(v.total/2),at0:cur.at0,at:Date.now()});loadRecent()}catch(e){}}
+let dsig="";
+function buildDE(){const ks=lines().map(a=>a[0]),sg=ks.join(",");if(sg===dsig)return;dsig=sg;const box=$("dc");box.innerHTML="<h2 style='margin-top:4px'>Descriptions edit pannunga</h2><p class='s'>Edhu venumnaalum maathunga, preview update aagum. Clear panna default description varum.</p>";ks.forEach((k,n)=>{const l=document.createElement("label");l.className="f";l.textContent="Item "+(n+1);const x=document.createElement("input");x.className="dsc";x.dataset.k=k;x.value=dn(k);x.style.marginBottom="8px";box.appendChild(l);box.appendChild(x)})}
+$("dc").addEventListener("input",e=>{const k=e.target.dataset&&e.target.dataset.k;if(k)DESC[k]=e.target.value});
+async function refresh(save){const v=calc(),{ds,ex}=dts();PDFD=makePDF(v,cur.no,ds,ex);$("pvn").textContent=cur.no;$("pvc").style.display="block";$("sb").textContent="Update Preview";buildDE();
+await renderPrev(PDFD.output("arraybuffer"));if(save)saveRec(v,ds,ex)}
+async function submit(){if(!$("cn").value.trim()||!$("cp").value.trim()){alert("Customer name and phone fill pannunga.");return}
+if(!rows().length){alert("Kuraindhathu oru service select pannunga.");return}
+if(!cur)cur={no:await genNo(),at0:Date.now()};await refresh(true);$("pvc").scrollIntoView({behavior:"smooth"})}
+function sched(){if(!cur)return;clearTimeout(tmr);tmr=setTimeout(()=>{if(valid())refresh(true)},900)}
+function qid(v){v=v.trim().toUpperCase();if(/^\d+$/.test(v)){const t=new Date(),y=t.getMonth()>=3?t.getFullYear():t.getFullYear()-1;return "IDEE-"+String(y).slice(2)+"-"+String(y+1).slice(2)+"-"+v.padStart(4,"0")}return v.replace(/[\/\s]+/g,"-")}
+async function openQ(id){try{const db=await claude.use("db");if(!db){alert("Old quotations inga available illa.");return}
+const s=await db.collection("quotations").doc(id).get();if(!s.exists){alert("Antha quotation number kedaikkala.");return}const o=s.data();
+const mp={cn:"name",cp:"phone",ce:"email",cb:"biz",ca:"addr",cm:"notes",ur:"ur",gs:"gs",dt:"dt",dv:"dv",vd:"vd",sp:"sp"};
+Object.keys(mp).forEach(k=>{const x=o[mp[k]];if(x!==undefined&&x!==null)$(k).value=x});
+resetItems();DESC={};try{DESC=JSON.parse(o.desc||"{}")}catch(e){}dsig="";let ls=[];try{ls=JSON.parse(o.lines||"[]")}catch(e){}
+ls.forEach(a=>{const k=a[0];if($("k"+k)){$("k"+k).checked=true;$("p"+k).value=a[1];$("q"+k).value=a[2]}});
+cur={no:o.no,at0:o.at0||o.at||Date.now()};calc();await refresh(false);$("pvc").scrollIntoView({behavior:"smooth"});
+if(!ls.length)alert("Intha pazhaya quotation-la services save aagala. Customer details mattum vandhuchu, services thirumba select pannunga.")}catch(e){alert("Quotation open panna mudiyala.")}}
+async function loadRecent(){try{const db=await claude.use("db");if(!db)return;$("oqc").style.display="block";
+const s=await db.collection("quotations").orderBy("at","desc").limit(8).get(),box=$("rl");box.innerHTML="";
+s.docs.forEach(x=>{const o=x.data()||{},b=document.createElement("button");b.className="alt rb";b.textContent=String(o.no||x.id).replace("IDEE/","")+"  ·  "+(o.name||"")+"  ·  "+fm(o.total||0);b.onclick=()=>openQ(x.id);box.appendChild(b)})}catch(e){}}
+$("sb").onclick=submit;
+$("oqb").onclick=()=>{const v=$("oq").value;if(v.trim())openQ(qid(v))};
+$("ed").onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+$("nw").onclick=()=>{cur=null;PDFD=null;rt++;$("pvc").style.display="none";$("sb").textContent="Submit & Preview";["cn","cp","ce","cb","ca","cm"].forEach(i=>$(i).value="");$("dt").value="n";$("dv").value=0;resetItems();DESC={};dsig="";calc();window.scrollTo({top:0,behavior:"smooth"})};
+$("dl").onclick=async()=>{if(!PDFD)return;const fn="Quotation-"+$("cn").value.trim().replace(/\s+/g,"_")+"-"+cur.no.replace(/\//g,"-")+".pdf";
+try{const dl=await claude.use("downloads");if(dl){await dl.save({filename:fn,data:PDFD.output("blob")});return}}catch(e){if(e&&e.code==="declined")return}
+try{PDFD.save(fn)}catch(e){}};
+loadRecent();
+/*RECEIPT*/
+let curR=null,PDFR=null,tmR=null,rqno="";
+const rg=id=>$(id).value,rdf=v=>{const m=String(v||"").match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?m[3]+"-"+m[2]+"-"+m[1]:fd(Date.now())};
+const todayISO=()=>{const t=new Date();return t.getFullYear()+"-"+pad2(t.getMonth()+1)+"-"+pad2(t.getDate())};
+function inw(n){n=Math.round(n);if(!n)return"Zero";const a=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"],b=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+const t=x=>x<20?a[x]:b[Math.floor(x/10)]+(x%10?" "+a[x%10]:""),h=x=>x>99?a[Math.floor(x/100)]+" Hundred"+(x%100?" "+t(x%100):""):t(x);let s="";const cr=Math.floor(n/1e7);n%=1e7;const lk=Math.floor(n/1e5);n%=1e5;const th=Math.floor(n/1e3);n%=1e3;
+if(cr)s+=h(cr)+" Crore ";if(lk)s+=h(lk)+" Lakh ";if(th)s+=h(th)+" Thousand ";if(n)s+=h(n);return s.trim()}
+function rcalc(){const t=+rg("r_t")||0,pp=+rg("r_pp")||0,am=+rg("r_am")||0;return{t,pp,am,bal:t?Math.max(0,t-pp-am):0}}
+const rvalid=()=>rg("r_n").trim()&&rg("r_p").trim()&&rg("r_d").trim()&&(+rg("r_am")>0);
+async function genRNo(){let n=0;try{n=+localStorage.getItem("rc")||0}catch(e){}
+try{const db=await claude.use("db");if(db){const s=await db.collection("receipts").orderBy("at","desc").limit(30).get();s.docs.forEach(x=>{const m=String((x.data()||{}).no||"").match(/(\d+)$/);if(m)n=Math.max(n,+m[1])})}}catch(e){}
+n++;try{localStorage.setItem("rc",n)}catch(e){}const t=new Date(),y=t.getMonth()>=3?t.getFullYear():t.getFullYear()-1;return "RCT/"+String(y).slice(2)+"-"+String(y+1).slice(2)+"/"+String(n).padStart(4,"0")}
+function makeReceipt(no){const {jsPDF}=window.jspdf,d=new jsPDF(),v=rcalc(),pdt=rdf(rg("r_dt")),mode=rg("r_m");
+const NV=[11,27,61],NV2=[21,46,98],AC=[0,136,238],CY=[43,184,255],TX=[28,32,44],GR=[244,245,248],MU=[105,113,130];
+const poly=(p,c)=>{d.setFillColor(...c);d.lines(p.slice(1).map((q,i)=>[q[0]-p[i][0],q[1]-p[i][1]]),p[0][0],p[0][1],[1,1],"F",true)};
+d.setFillColor(...NV);d.rect(0,0,210,51,"F");
+poly([[0,0],[130,0],[92,45],[0,45]],NV2);poly([[130,0],[210,0],[210,7.2],[124,7.2]],AC);poly([[0,45],[92,45],[100,51],[0,51]],AC);
+if(LOGO){const r=LOGO.w/LOGO.h;let w=88,h=w/r;if(h>27){h=27;w=h*r}try{d.addImage(LOGO.u,"PNG",12,23-h/2,w,h)}catch(x){}}else{d.setTextColor(255,255,255);d.setFont("helvetica","bold");d.setFontSize(20);d.text("IDEE INFOTECH",12,26)}
+d.setTextColor(...CY);d.setFont("helvetica","bold");d.setFontSize(26);d.text("RECEIPT",198.5,26,{align:"right"});d.setFontSize(7.5);
+[["Receipt No:",no],["Date:",pdt],["Mode:",mode]].forEach((a,i)=>{const yy=32.5+i*5;d.setTextColor(255,255,255);d.setFont("helvetica","bold");d.text(a[0],151,yy);d.setTextColor(205,220,240);d.setFont("helvetica","normal");d.text(a[1],198.5,yy,{align:"right"})});
+const L=12,RX=151;
+d.setFont("helvetica","bold");d.setFontSize(8);d.setTextColor(...AC);d.text("RECEIVED FROM:",L,63);d.text("RECEIVED BY:",RX,63);
+d.setTextColor(...TX);d.setFontSize(15);d.text(d.splitTextToSize(rg("r_n"),120)[0],L,72);d.setFontSize(12);d.text("Idee Infotech",RX,72);
+const ln=(x,yy,lab,val,w)=>{if(!val)return yy;d.setFontSize(8.5);d.setTextColor(...TX);let lw=0;if(lab){d.setFont("helvetica","bold");d.text(lab,x,yy);lw=d.getTextWidth(lab+" ")}d.setFont("helvetica","normal");const ls=d.splitTextToSize(val,w-lw);d.text(ls,x+lw,yy);return yy+4.8*ls.length};
+let y=78.5,y2=78.5;
+y=ln(L,y,"",rg("r_b"),110);y=ln(L,y,"",rg("r_a"),110);y=ln(L,y,"Phone:",rg("r_p"),110);y=ln(L,y,"Email:",rg("r_e"),110);
+y2=ln(RX,y2,"","Digital Marketing & Creative Services",50);y2=ln(RX,y2,"GSTIN:",rg("sg"),50);y2=ln(RX,y2,"Collected by:",rg("sp"),50);
+y=Math.max(y,y2);if(rqno||rg("r_q").trim())y=ln(L,y+1,"Quotation No:",rqno||rg("r_q").trim(),110);
+const cp=(l,r)=>({top:3.6,bottom:3.6,left:l,right:r});
+d.autoTable({startY:Math.max(99,y+3),margin:{left:0,right:0,top:15,bottom:22},theme:"plain",
+head:[[{content:"NO.",styles:{halign:"left",cellPadding:cp(12,2)}},{content:"PAYMENT FOR",styles:{halign:"left",cellPadding:cp(8,2)}},{content:"MODE",styles:{halign:"center"}},{content:"REFERENCE NO.",styles:{halign:"center"}},{content:"AMOUNT",styles:{halign:"right",cellPadding:cp(2,11.5)}}]],
+body:[[1,rg("r_d"),mode,rg("r_ref")||"-",fm(v.am)]],
+styles:{fontSize:8.5,textColor:TX,cellPadding:cp(2,2),valign:"middle"},headStyles:{fillColor:AC,textColor:255,fontStyle:"bold",fontSize:8},
+columnStyles:{0:{cellWidth:24,cellPadding:cp(12,2)},1:{cellWidth:76,cellPadding:cp(8,2)},2:{cellWidth:32,halign:"center"},3:{cellWidth:38,halign:"center"},4:{cellWidth:40,halign:"right",cellPadding:cp(2,11.5)}},
+didParseCell:h=>{if(h.section==="body"&&[0,2,4].includes(h.column.index))h.cell.styles.fillColor=GR},
+didDrawCell:h=>{if(h.section==="body"){const c=h.cell;d.setDrawColor(232,235,241);d.setLineWidth(.2);d.line(c.x,c.y+c.height,c.x+c.width,c.y+c.height)}}});
+let t=d.lastAutoTable.finalY+9;if(t>205){d.addPage();t=22}
+d.setTextColor(...TX);d.setFont("helvetica","bold");d.setFontSize(10);d.text("Amount in Words:",L,t+4);
+d.setFont("helvetica","normal");d.setFontSize(9);const wl=d.splitTextToSize("Rupees "+inw(v.am)+" Only",115);d.text(wl,L,t+10);let ky=t+10+4.4*wl.length;
+const T=[];if(v.t)T.push(["Total Amount",fm(v.t)]);if(v.pp)T.push(["Previously Paid",fm(v.pp)]);
+let ty=t+2;T.forEach(r=>{d.setFont("helvetica","normal");d.setFontSize(8.5);d.setTextColor(...MU);d.text(r[0],158,ty);d.setFont("helvetica","bold");d.setTextColor(...TX);d.text(r[1],198.5,ty,{align:"right"});ty+=6.2});
+d.setFillColor(...AC);d.rect(151,ty-1,59,11.5,"F");d.setTextColor(255,255,255);d.setFont("helvetica","bold");d.setFontSize(9.5);d.text("Amount Paid",158,ty+6.2);d.setFontSize(10);d.text(fm(v.am),198.5,ty+6.2,{align:"right"});
+if(v.t){d.setFont("helvetica","normal");d.setFontSize(8.5);d.setTextColor(...MU);d.text("Balance Due",158,ty+16);d.setFont("helvetica","bold");d.setTextColor(...TX);d.text(fm(v.bal),198.5,ty+16,{align:"right"});ty+=10}
+if(rg("r_nt").trim()){ky+=3;d.setFont("helvetica","bold");d.setFontSize(9.5);d.setTextColor(...TX);d.text("Notes:",L,ky);d.setFont("helvetica","normal");d.setFontSize(8.5);const nl=d.splitTextToSize(rg("r_nt"),115);d.text(nl,L,ky+5);ky+=5+4.4*nl.length}
+ky+=2;d.setFont("helvetica","normal");d.setFontSize(7.5);d.setTextColor(...MU);["This is a computer-generated receipt.","Payment received is subject to the terms mentioned in the quotation."].forEach(x=>{d.text("- "+x,L,ky+3);ky+=3.8});
+const th=ky+10;d.setTextColor(...TX);d.setFont("helvetica","bold");d.setFontSize(11);d.text("Thank You For Your Payment",L,th);
+const ic=(k,x,yy)=>{d.setFillColor(...AC);d.roundedRect(x,yy,5,5,1,1,"F");d.setFillColor(255,255,255);
+if(k==="p"){d.roundedRect(x+1.7,yy+1,1.6,3,.4,.4,"F")}else if(k==="e"){d.rect(x+1,yy+1.4,3,2.2,"F");d.setDrawColor(...AC);d.setLineWidth(.3);d.line(x+1,yy+1.4,x+2.5,yy+2.7);d.line(x+4,yy+1.4,x+2.5,yy+2.7)}else{d.circle(x+2.5,yy+2.2,1.2,"F");d.setFillColor(...AC);d.circle(x+2.5,yy+2.2,.45,"F")}};
+let cy=th+6;[["p","7810010572"],["e","ideeinfotech@gmail.com"],["l",rg("sa")]].filter(r=>r[1]).forEach(r=>{ic(r[0],L,cy);d.setFont("helvetica","normal");d.setFontSize(8.5);d.setTextColor(...TX);d.text(d.splitTextToSize(r[1],100)[0],L+8,cy+3.5);cy+=7});
+const sy=Math.max(ty+34,th+12);if(SIG){const r=SIG.w/SIG.h;let w=44,h=w/r;if(h>17){h=17;w=h*r}try{d.addImage(SIG.u,"PNG",174.75-w/2,sy-h-1.5,w,h)}catch(x){}}
+d.setDrawColor(190,195,205);d.setLineWidth(.3);d.line(151,sy,198.5,sy);d.setFont("helvetica","bold");d.setFontSize(8.5);d.setTextColor(...TX);d.text("Authorised Sign",174.75,sy+5,{align:"center"});
+poly([[0,284.6],[90,284.6],[79,297],[0,297]],AC);poly([[88.6,289],[210,289],[210,297],[81.5,297]],NV);
+return d}/*END_RECEIPT*/
+async function rsave(){try{const db=await claude.use("db");if(!db)return;const v=rcalc();
+await db.collection("receipts").doc(curR.no.replace(/\//g,"-")).set({no:curR.no,date:fd(curR.at0),pdate:rg("r_dt"),qno:rqno||rg("r_q").trim(),name:rg("r_n"),phone:rg("r_p"),email:rg("r_e"),biz:rg("r_b"),addr:rg("r_a"),desc:rg("r_d"),total:v.t,prev:v.pp,amount:v.am,balance:v.bal,mode:rg("r_m"),ref:rg("r_ref"),notes:rg("r_nt"),at0:curR.at0,at:Date.now()});rrecent()}catch(e){}}
+async function rrefresh(save){PDFR=makeReceipt(curR.no);$("r_pvn").textContent=curR.no;$("r_pvc").style.display="block";$("r_sb").textContent="Update Preview";
+await renderPrev(PDFR.output("arraybuffer"),"r_pv");if(save)rsave()}
+async function rsubmit(){if(!rg("r_n").trim()||!rg("r_p").trim()){alert("Customer name and phone fill pannunga.");return}
+if(!rg("r_d").trim()){alert("Payment for (description) fill pannunga.");return}if(!(+rg("r_am")>0)){alert("Amount received podunga.");return}
+if(!curR)curR={no:await genRNo(),at0:Date.now()};await rrefresh(true);$("r_pvc").scrollIntoView({behavior:"smooth"})}
+function rsched(){if(!curR)return;clearTimeout(tmR);tmR=setTimeout(()=>{if(rvalid())rrefresh(true)},900)}
+function rid(v){v=v.trim().toUpperCase();if(/^\d+$/.test(v)){const t=new Date(),y=t.getMonth()>=3?t.getFullYear():t.getFullYear()-1;return "RCT-"+String(y).slice(2)+"-"+String(y+1).slice(2)+"-"+v.padStart(4,"0")}return v.replace(/[\/\s]+/g,"-")}
+async function ropen(id){try{const db=await claude.use("db");if(!db){alert("Old receipts inga available illa.");return}
+const s=await db.collection("receipts").doc(id).get();if(!s.exists){alert("Antha receipt number kedaikkala.");return}const o=s.data();
+const mp={r_n:"name",r_p:"phone",r_e:"email",r_b:"biz",r_a:"addr",r_d:"desc",r_t:"total",r_pp:"prev",r_am:"amount",r_m:"mode",r_ref:"ref",r_dt:"pdate",r_nt:"notes",r_q:"qno"};
+Object.keys(mp).forEach(k=>{const x=o[mp[k]];if(x!==undefined&&x!==null)$(k).value=(k==="r_t"||k==="r_pp")&&!x?"":x});rqno=o.qno||"";
+curR={no:o.no,at0:o.at0||o.at||Date.now()};await rrefresh(false);$("r_pvc").scrollIntoView({behavior:"smooth"})}catch(e){alert("Receipt open panna mudiyala.")}}
+async function rrecent(){try{const db=await claude.use("db");if(!db)return;$("r_oqc").style.display="block";
+const s=await db.collection("receipts").orderBy("at","desc").limit(8).get(),box=$("r_rl");box.innerHTML="";
+s.docs.forEach(x=>{const o=x.data()||{},b=document.createElement("button");b.className="alt rb";b.textContent=String(o.no||x.id).replace("RCT/","")+"  ·  "+(o.name||"")+"  ·  "+fm(o.amount||0);b.onclick=()=>ropen(x.id);box.appendChild(b)})}catch(e){}}
+async function fetchQ(){const v=rg("r_q").trim();if(!v)return;try{const db=await claude.use("db");if(!db){alert("Quotation lookup inga available illa.");return}
+const s=await db.collection("quotations").doc(qid(v)).get();if(!s.exists){alert("Antha quotation number kedaikkala.");return}const o=s.data();let prev=0;
+try{const s2=await db.collection("receipts").where("qno","==",o.no).get();s2.docs.forEach(x=>{if(!curR||x.id!==curR.no.replace(/\//g,"-"))prev+=+(x.data()||{}).amount||0})}catch(e){}
+rqno=o.no;$("r_q").value=o.no;$("r_n").value=o.name||"";$("r_p").value=o.phone||"";$("r_e").value=o.email||"";$("r_b").value=o.biz||"";$("r_a").value=o.addr||"";
+$("r_t").value=o.total||"";$("r_pp").value=prev||"";$("r_am").value=prev?Math.max(0,(o.total||0)-prev):(o.adv||"");$("r_d").value=(prev?"Payment":"Advance payment")+" against Quotation "+o.no;
+rsched()}catch(e){alert("Fetch panna mudiyala.")}}
+function rreset(){curR=null;PDFR=null;rtR++;rqno="";$("r_pvc").style.display="none";$("r_sb").textContent="Submit & Preview";["r_q","r_n","r_p","r_e","r_b","r_a","r_d","r_t","r_pp","r_am","r_ref","r_nt"].forEach(i=>$(i).value="");$("r_m").value="Cash";$("r_dt").value=todayISO();window.scrollTo({top:0,behavior:"smooth"})}
+$("r_dt").value=todayISO();
+$("r_sb").onclick=rsubmit;$("r_qb").onclick=fetchQ;$("r_oqb").onclick=()=>{const v=rg("r_oq");if(v.trim())ropen(rid(v))};
+$("r_ed").onclick=()=>window.scrollTo({top:0,behavior:"smooth"});$("r_nw").onclick=rreset;
+$("r_dl").onclick=async()=>{if(!PDFR)return;const fn="Receipt-"+rg("r_n").trim().replace(/\s+/g,"_")+"-"+curR.no.replace(/\//g,"-")+".pdf";
+try{const dl=await claude.use("downloads");if(dl){await dl.save({filename:fn,data:PDFR.output("blob")});return}}catch(e){if(e&&e.code==="declined")return}
+try{PDFR.save(fn)}catch(e){}};
+$("tr").addEventListener("input",e=>{if(e.target.id!=="r_oq"&&e.target.id!=="r_q")rsched()});$("tr").addEventListener("change",rsched);
+function tab(n){$("tq").style.display=n==1?"block":"none";$("tr").style.display=n==2?"block":"none";$("qbar").style.display=n==1?"":"none";$("tb1").classList.toggle("on",n==1);$("tb2").classList.toggle("on",n==2);window.scrollTo(0,0)}
+$("tb1").onclick=()=>tab(1);$("tb2").onclick=()=>tab(2);
+rrecent();
 </script></body></html>
